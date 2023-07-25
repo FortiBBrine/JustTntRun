@@ -1,0 +1,4 @@
+name: JustTntRun
+version: '${project.version}'
+main: me.fortibrine.justtntrun.JustTntRun
+api-version: 1.13
