@@ -1,11 +1,9 @@
 package me.fortibrine.justtntrun;
 
 import lombok.Getter;
+import me.fortibrine.justtntrun.commands.CommandArena;
 import me.fortibrine.justtntrun.listeners.Listener;
-import me.fortibrine.justtntrun.utils.PlaceholderManager;
-import me.fortibrine.justtntrun.utils.RunnableManager;
-import me.fortibrine.justtntrun.utils.SQLManager;
-import me.fortibrine.justtntrun.utils.VariableManager;
+import me.fortibrine.justtntrun.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,6 +20,9 @@ public final class JustTntRun extends JavaPlugin {
     @Getter
     private VariableManager variableManager;
 
+    @Getter
+    public MessageManager messageManager;
+
     @Override
     public void onEnable() {
         File config = new File(this.getDataFolder() + File.separator + "config.yml");
@@ -31,16 +32,17 @@ public final class JustTntRun extends JavaPlugin {
         }
 
         sqlManager = new SQLManager();
-
         variableManager = new VariableManager(this.getConfig());
+        messageManager = new MessageManager(this);
+        new RunnableManager(this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new PlaceholderManager(this).register();
         }
 
-        new RunnableManager(this);
-
         Bukkit.getPluginManager().registerEvents(new Listener(this), this);
+
+        this.getCommand("arena").setExecutor(new CommandArena(this));
 
     }
 

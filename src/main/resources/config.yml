@@ -2,3 +2,21 @@ materials:
   - TNT
 time: 30
 events: false
+
+arenas:
+  main:
+    name: MAIN
+    location:
+      world: world
+      x: 0
+      y: 70
+      z: 0
+    players: 16
+
+arena-list:
+  title: "Список арен"
+
+template:
+  name: "Арена: %name"
+  lore: []
+  material: TNT

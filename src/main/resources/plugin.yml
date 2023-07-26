@@ -4,3 +4,18 @@ main: me.fortibrine.justtntrun.JustTntRun
 api-version: 1.13
 
 softdepend: [PlaceholderAPI]
+
+commands:
+  arena:
+    description: "Команда для просмотра списка арен"
+    usage: /arena
+
+permissions:
+  justtntrun.*:
+    description: "Все права"
+    default: op
+    children:
+      justtntrun.arena: true
+  justtntrun.arena:
+    description: "Право на проход на арену"
+    default: true
