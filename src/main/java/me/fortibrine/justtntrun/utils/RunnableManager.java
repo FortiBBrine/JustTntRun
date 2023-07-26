@@ -19,7 +19,7 @@ public class RunnableManager {
         this.variableManager = plugin.getVariableManager();
         this.sqlManager = plugin.getSqlManager();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> checkBlockUnderPlayer(), 0L, 0L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> checkBlockUnderPlayer(), 0L, 1L);
     }
 
     private void checkBlockUnderPlayer() {
@@ -34,8 +34,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, finalBlock.getType()), variableManager.getTime() * 20L);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
 
                 sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
 
@@ -45,8 +44,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, finalBlock.getType()), variableManager.getTime() * 20L);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
 
                 sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
 
@@ -56,8 +54,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, finalBlock.getType()), variableManager.getTime() * 20L);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
 
                 sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
 
@@ -67,8 +64,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, finalBlock.getType()), variableManager.getTime() * 20L);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
                 sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
 
                 return;
@@ -78,10 +74,21 @@ public class RunnableManager {
     }
 
     private void renewBlock(Block block, Material material) {
-//
-//        System.out.println(material.toString());
+
+        Material type = block.getType();
+
+        if (type == Material.AIR) {
+            return;
+        }
 
         block.setType(material);
+
+        plugin.getVariableManager().getRenewBlocks().put(block, type);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            block.setType(type);
+            plugin.getVariableManager().getRenewBlocks().remove(block);
+        }, variableManager.getTime() * 20L);
     }
 
 }

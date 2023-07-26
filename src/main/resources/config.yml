@@ -1,3 +1,4 @@
 materials:
   - TNT
 time: 30
+events: false
