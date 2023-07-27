@@ -3,6 +3,12 @@ materials:
 time: 30
 events: false
 
+spawn:
+  world: world
+  x: 0
+  y: 70
+  z: 0
+
 arenas:
   main:
     name: MAIN
@@ -13,10 +19,3 @@ arenas:
       z: 0
     players: 16
 
-arena-list:
-  title: "Список арен"
-
-template:
-  name: "Арена: %name"
-  lore: []
-  material: TNT

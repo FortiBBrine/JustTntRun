@@ -29,11 +29,13 @@ public final class JustTntRun extends JavaPlugin {
         if (!config.exists()) {
             this.getConfig().options().copyDefaults(true);
             this.saveDefaultConfig();
+
+            saveResource("messages.yml", false);
         }
 
         sqlManager = new SQLManager();
-        variableManager = new VariableManager(this.getConfig());
         messageManager = new MessageManager(this);
+        variableManager = new VariableManager(this.getConfig(), messageManager);
         new RunnableManager(this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {

@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +33,22 @@ public class MessageManager {
         message = PlaceholderAPI.setPlaceholders(player, message);
 
         player.sendMessage(message);
+    }
+
+    public String parseString(String path) {
+        String message = this.messagesConfig.getString(path);
+
+        message = supportMessagesJSON(supportColorsHEX(message)).replace("&", "§");
+
+        return message;
+    }
+
+    public List<String> parseStringList(String path) {
+        List<String> stringList = this.messagesConfig.getStringList(path);
+
+        stringList.replaceAll(message -> supportMessagesJSON(supportColorsHEX(message)).replace("&", "§"));
+
+        return stringList;
     }
 
     private String supportColorsHEX(String nameMessage) {

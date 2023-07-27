@@ -1,1 +1,16 @@
 not-permission: "У вас нет прав."
+leave-arena: "&7Вы покинули арену."
+join-arena: "&7Вы присоеденились к арене."
+game-start: "&7Игра началась!"
+end-game: "&7Игра закончилась для вас победой!"
+
+death: "&7АХАХАХАХАХ ВЫ ПРОГРАЛИ."
+
+arena-list:
+  title: "Список арен"
+
+template:
+  name: "&dАрена: %name"
+  lore:
+    - "&7Игроки: %playersWait/%players"
+  material: TNT

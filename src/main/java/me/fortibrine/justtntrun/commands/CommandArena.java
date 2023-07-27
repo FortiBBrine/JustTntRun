@@ -40,12 +40,26 @@ public class CommandArena implements CommandExecutor {
             return true;
         }
 
+        if (args.length > 0 && args[0].equals("leave")) {
+
+            if (!variableManager.getPlayersArena().containsKey(player)) return true;
+
+            if (variableManager.getPlayersArena().get(player).isInGame()) {
+                return true;
+            }
+
+            variableManager.getPlayersArena().get(player).getPlayerList().remove(player);
+            variableManager.getPlayersArena().remove(player);
+
+            return true;
+        }
+
         List<Arena> arenas = variableManager.getArenaList();
         Map<ItemStack, Arena> items = new HashMap<>();
 
         arenas.forEach(arena -> items.put(variableManager.fromArena(arena), arena));
 
-        ArenaListInventory arenaListInventory = new ArenaListInventory(items, variableManager);
+        ArenaListInventory arenaListInventory = new ArenaListInventory(items, variableManager, messageManager);
 
         player.openInventory(arenaListInventory.getInventory());
 

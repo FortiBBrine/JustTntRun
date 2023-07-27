@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -38,9 +39,12 @@ public class VariableManager {
     @Getter
     private String arenaListTitle;
 
+    @Getter
+    private Map<Player, Arena> playersArena = new HashMap<>();
+
     private ItemStack template;
 
-    public VariableManager(FileConfiguration config) {
+    public VariableManager(FileConfiguration config, MessageManager messageManager) {
         config.getStringList("materials").forEach(s -> materialList.add(Material.matchMaterial(s)));
         this.time = config.getInt("time");
         this.enableEvents = config.getBoolean("events");
@@ -52,11 +56,11 @@ public class VariableManager {
 
             int players = arenas.getInt(key + ".players");
 
-            double x = arenas.getDouble(key + ".x");
-            double y = arenas.getDouble(key + ".y");
-            double z = arenas.getDouble(key + ".z");
+            double x = arenas.getDouble(key + ".location.x");
+            double y = arenas.getDouble(key + ".location.y");
+            double z = arenas.getDouble(key + ".location.z");
 
-            World world = Bukkit.getWorld(arenas.getString(key + ".world"));
+            World world = Bukkit.getWorld(arenas.getString(key + ".location.world"));
 
             Location location = new Location(world, x, y, z);
 
@@ -65,16 +69,16 @@ public class VariableManager {
             this.arenaList.add(arena);
         }
 
-        this.template = new ItemStack(Material.matchMaterial(config.getString("template.material")));
+        this.template = new ItemStack(Material.matchMaterial(messageManager.parseString("template.material")));
 
         ItemMeta meta = this.template.getItemMeta();
 
-        meta.setDisplayName(config.getString("template.name"));
-        meta.setLore(config.getStringList("template.lore"));
+        meta.setDisplayName(messageManager.parseString("template.name"));
+        meta.setLore(messageManager.parseStringList("template.lore"));
 
         this.template.setItemMeta(meta);
 
-        this.arenaListTitle = config.getString("arena-list.title");
+        this.arenaListTitle = messageManager.parseString("arena-list.title");
 
     }
 
@@ -86,7 +90,10 @@ public class VariableManager {
         meta.setDisplayName(meta.getDisplayName().replace("%name", arena.getName()).replace("%playersWait", String.valueOf(arena.getPlayerList().size())).replace("%players", String.valueOf(arena.getPlayers())));
 
         List<String> lore = meta.getLore();
-        lore.replaceAll(s -> s.replace("%name", arena.getName()).replace("%playersWait", String.valueOf(arena.getPlayerList().size())).replace("%players", String.valueOf(arena.getPlayers())));
+
+        if (lore != null) {
+            lore.replaceAll(s -> s.replace("%name", arena.getName()).replace("%playersWait", String.valueOf(arena.getPlayerList().size())).replace("%players", String.valueOf(arena.getPlayers())));
+        }
 
         meta.setLore(lore);
 

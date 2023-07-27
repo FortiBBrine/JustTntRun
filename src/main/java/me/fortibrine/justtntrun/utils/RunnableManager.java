@@ -24,6 +24,9 @@ public class RunnableManager {
 
     private void checkBlockUnderPlayer() {
         for (Player player : Bukkit.getOnlinePlayers()) {
+
+            if (!variableManager.getPlayersArena().containsKey(player)) return;
+
             Location location = player.getLocation();
 
             location.setY(location.getY() - 1);
