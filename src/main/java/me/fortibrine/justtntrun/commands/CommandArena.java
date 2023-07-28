@@ -42,14 +42,20 @@ public class CommandArena implements CommandExecutor {
 
         if (args.length > 0 && args[0].equals("leave")) {
 
-            if (!variableManager.getPlayersArena().containsKey(player)) return true;
+            if (!variableManager.getPlayersArena().containsKey(player)){
+                messageManager.sendMessage(player, "leave-arena");
+                return true;
+            }
 
             if (variableManager.getPlayersArena().get(player).isInGame()) {
+                messageManager.sendMessage(player, "already-in-game");
                 return true;
             }
 
             variableManager.getPlayersArena().get(player).getPlayerList().remove(player);
             variableManager.getPlayersArena().remove(player);
+
+            messageManager.sendMessage(player, "leave-arena");
 
             return true;
         }

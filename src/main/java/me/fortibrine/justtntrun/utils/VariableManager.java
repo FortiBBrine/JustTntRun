@@ -31,7 +31,7 @@ public class VariableManager {
     private boolean enableEvents;
 
     @Getter
-    private Map<Block, Material> renewBlocks = new HashMap<>();
+    private Location backLocation;
 
     @Getter
     private List<Arena> arenaList = new ArrayList<>();
@@ -80,6 +80,12 @@ public class VariableManager {
 
         this.arenaListTitle = messageManager.parseString("arena-list.title");
 
+        this.backLocation = new Location(
+                Bukkit.getWorld(config.getString("spawn.world")),
+                config.getDouble("spawn.x"),
+                config.getDouble("spawn.y"),
+                config.getDouble("z")
+        );
     }
 
     public ItemStack fromArena(Arena arena) {

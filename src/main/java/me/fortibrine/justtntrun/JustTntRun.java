@@ -1,6 +1,7 @@
 package me.fortibrine.justtntrun;
 
 import lombok.Getter;
+import me.fortibrine.justtntrun.arena.Arena;
 import me.fortibrine.justtntrun.commands.CommandArena;
 import me.fortibrine.justtntrun.listeners.Listener;
 import me.fortibrine.justtntrun.utils.*;
@@ -52,10 +53,6 @@ public final class JustTntRun extends JavaPlugin {
     public void onDisable() {
         this.sqlManager.close();
 
-        Map<Block, Material> renewBlocks = this.getVariableManager().getRenewBlocks();
-
-        for (Block block : renewBlocks.keySet()) {
-            block.setType(renewBlocks.get(block));
-       }
+        variableManager.getArenaList().forEach(Arena::regenerateBlocks);
     }
 }

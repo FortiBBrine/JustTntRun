@@ -77,6 +77,10 @@ public class Listener implements org.bukkit.event.Listener {
 
             Arena arena = variableManager.getPlayersArena().get(player);
 
+            plugin.getMessageManager().sendMessage(player, "death");
+
+            player.teleport(variableManager.getBackLocation());
+
             if (arena.getPlayerList().size() == 1) {
                 Player winner = arena.getPlayerList().get(0);
 
@@ -86,6 +90,10 @@ public class Listener implements org.bukkit.event.Listener {
                 arena.getPlayerList().clear();
 
                 variableManager.getPlayersArena().remove(winner);
+
+                arena.regenerateBlocks();
+
+                plugin.getSqlManager().addWin(winner.getUniqueId().toString());
             }
         }
     }
@@ -105,6 +113,8 @@ public class Listener implements org.bukkit.event.Listener {
 
             plugin.getMessageManager().sendMessage(player, "death");
 
+            player.teleport(variableManager.getBackLocation());
+
             if (arena.getPlayerList().size() == 1) {
                 Player winner = arena.getPlayerList().get(0);
 
@@ -114,6 +124,10 @@ public class Listener implements org.bukkit.event.Listener {
                 arena.getPlayerList().clear();
 
                 variableManager.getPlayersArena().remove(winner);
+
+                arena.regenerateBlocks();
+
+                plugin.getSqlManager().addWin(winner.getUniqueId().toString());
             }
         }
     }

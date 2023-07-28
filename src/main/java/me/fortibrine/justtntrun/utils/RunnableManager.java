@@ -1,6 +1,7 @@
 package me.fortibrine.justtntrun.utils;
 
 import me.fortibrine.justtntrun.JustTntRun;
+import me.fortibrine.justtntrun.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,6 +28,8 @@ public class RunnableManager {
 
             if (!variableManager.getPlayersArena().containsKey(player)) return;
 
+            Arena arena = variableManager.getPlayersArena().get(player);
+
             Location location = player.getLocation();
 
             location.setY(location.getY() - 1);
@@ -37,9 +40,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
-
-                sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(arena, finalBlock, Material.AIR, uuid.toString()), 3L);
 
                 return;
             }
@@ -47,9 +48,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
-
-                sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(arena, finalBlock, Material.AIR, uuid.toString()), 3L);
 
                 return;
             }
@@ -57,9 +56,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
-
-                sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(arena, finalBlock, Material.AIR, uuid.toString()), 3L);
 
                 return;
             }
@@ -67,8 +64,7 @@ public class RunnableManager {
             if (variableManager.getMaterialList().contains(block.getType())) {
                 Block finalBlock = block;
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(finalBlock, Material.AIR), 3L);
-                sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> renewBlock(arena, finalBlock, Material.AIR, uuid.toString()), 3L);
 
                 return;
             }
@@ -76,7 +72,7 @@ public class RunnableManager {
         }
     }
 
-    private void renewBlock(Block block, Material material) {
+    private void renewBlock(Arena arena, Block block, Material material, String uuid) {
 
         Material type = block.getType();
 
@@ -84,14 +80,18 @@ public class RunnableManager {
             return;
         }
 
+        arena.getRenewBlocks().put(block, material);
+
+        sqlManager.setBlocks(uuid.toString(), sqlManager.getBlocks(uuid.toString()) + 1);
+
         block.setType(material);
+//
+//        plugin.getVariableManager().getRenewBlocks().put(block, type);
 
-        plugin.getVariableManager().getRenewBlocks().put(block, type);
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            block.setType(type);
-            plugin.getVariableManager().getRenewBlocks().remove(block);
-        }, variableManager.getTime() * 20L);
+//        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+//            block.setType(type);
+//            plugin.getVariableManager().getRenewBlocks().remove(block);
+//        }, variableManager.getTime() * 20L);
     }
 
 }

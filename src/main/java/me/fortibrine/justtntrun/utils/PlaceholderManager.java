@@ -43,6 +43,12 @@ public class PlaceholderManager extends PlaceholderExpansion {
             return String.valueOf(blocks);
         }
 
+        if (params.equalsIgnoreCase("wins")) {
+            UUID uuid = player.getUniqueId();
+            int wins = sqlManager.getWins(uuid.toString());
+            return String.valueOf(wins);
+        }
+
         return null;
     }
 }
